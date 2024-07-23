@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 //тестирование комита
+//второй тест коммита через гитхаб
 
 namespace GeniyIdiotConsoleApp
 {
