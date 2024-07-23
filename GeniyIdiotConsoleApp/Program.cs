@@ -57,7 +57,7 @@ namespace GeniyIdiotConsoleApp
                 }
             }
             return random;
-            
+
         }
 
         static void Main(string[] args)
@@ -84,25 +84,38 @@ namespace GeniyIdiotConsoleApp
 
                     Console.WriteLine($"Вопрос #{i + 1}");
                     Console.WriteLine(questions[value]);
-
-                    int userAnswer = int.Parse(Console.ReadLine());
-
-                    int rightAnswer = answers[value];
-                    if (userAnswer == rightAnswer)
+                    while (true)
                     {
-                        countRightAnswers++;
+                        string userAnswerInput = Console.ReadLine();
+                        int userAnswer = 0;
+                        bool checkUserAnswer = int.TryParse(userAnswerInput, out userAnswer);
+
+                        if (checkUserAnswer)
+                        {
+                            int rightAnswer = answers[value];
+                            if (userAnswer == rightAnswer)
+                            {
+                                countRightAnswers++;
+                            }
+                            break;
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{userName}, Пожалуйста введите число!");
+                        }
+                        
                     }
                 }
                 Console.Write($"{userName}, Ваш диагноз: ");
                 GetDiagnosis(countRightAnswers);
                 Console.WriteLine($"Количество правильных ответов: {countRightAnswers}");
                 Console.WriteLine("----------------------------------------");
-                Console.WriteLine("Хотите ли пройти тест снова?");
+                Console.WriteLine("Хотите ли пройти тест снова? Введите ДА или НЕТ");
                 string userAnswerRepeatTest = Console.ReadLine();
-                if (userAnswerRepeatTest == "нет".ToLower()) flagStartForTest = false; 
+                if (userAnswerRepeatTest == "нет".ToLower()) flagStartForTest = false;
 
             }
-            
+
 
         }
     }
