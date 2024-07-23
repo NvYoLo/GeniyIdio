@@ -7,17 +7,28 @@ namespace GeniyIdiotConsoleApp
 
     internal class Program
     {
-        public static void GetDiagnosis(int count)
+        public static void GetDiagnosis(int count, int countQuestion)
         {
-            switch (count)
+            double resultInPercent = ((double)count / countQuestion) * 100;
+            var result = new Dictionary<int, string>
             {
-                case 1: Console.WriteLine("Кретин"); break;
-                case 2: Console.WriteLine("Дурак"); break;
-                case 3: Console.WriteLine("Нормальный"); break;
-                case 4: Console.WriteLine("Талант"); break;
-                case 5: Console.WriteLine("Гений"); break;
-                default: Console.WriteLine("Идиот"); break;
+                {0, "Идиот" },
+                {1, "Кретин" },
+                {20, "Дурак" },
+                {40, "Нормальный" },
+                {60, "Талант" },
+                {80, "Гений" }
+            };
+            string rating = "Unknown";
+            foreach (var item in result)
+            {
+                if (resultInPercent < item.Key)
+                {
+                    break;
+                }
+                rating = item.Value;
             }
+            Console.WriteLine(rating);
 
         }
         public static string[] GetQuestions(int countQuestions)
@@ -103,11 +114,11 @@ namespace GeniyIdiotConsoleApp
                         {
                             Console.WriteLine($"{userName}, Пожалуйста введите число!");
                         }
-                        
+
                     }
                 }
                 Console.Write($"{userName}, Ваш диагноз: ");
-                GetDiagnosis(countRightAnswers);
+                GetDiagnosis(countRightAnswers, countQuestions);
                 Console.WriteLine($"Количество правильных ответов: {countRightAnswers}");
                 Console.WriteLine("----------------------------------------");
                 Console.WriteLine("Хотите ли пройти тест снова? Введите ДА или НЕТ");
