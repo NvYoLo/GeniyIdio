@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Xml.Linq;
 
 
 namespace GeniyIdiotConsoleApp
@@ -7,7 +9,35 @@ namespace GeniyIdiotConsoleApp
 
     internal class Program
     {
-        public static void GetDiagnosis(int count, int countQuestion)
+        public static void SaveFileResult(string userName, int countRightAnswers, string Diagnosis)
+        {
+            string filename = @"C:\Users\VSPrudius\source\repos\GeniyIdio1\result.txt";
+            try
+            {
+                using (StreamWriter writer = new StreamWriter(filename, true))
+                {
+                    writer.WriteLine("{0, -15} |{1, -29} | {2, -11} |", userName, countRightAnswers, Diagnosis);
+                    writer.WriteLine("--------------------------------------------------------------");
+                    Console.WriteLine("Результат тестирования сохранен!");
+                }
+                
+            }
+            catch(Exception)
+            {
+                Console.WriteLine("Результат тестирования не сохранен!");
+            } 
+        }
+        public static void OpenFileResult()
+        {
+            string filename = @"C:\Users\VSPrudius\source\repos\GeniyIdio1\result.txt";
+            Console.WriteLine("{0, -15} |{1, 11} | {2, 10} |", "Ваше имя", "Количество правильных ответов", "Ваш диагноз");
+            Console.WriteLine("--------------------------------------------------------------");
+            using (StreamReader reader = new StreamReader(filename))
+            {
+                Console.WriteLine(reader.ReadToEnd());
+            }
+        }
+        public static string GetDiagnosis(int count, int countQuestion)
         {
             double resultInPercent = ((double)count / countQuestion) * 100;
             var result = new Dictionary<int, string>
@@ -28,7 +58,7 @@ namespace GeniyIdiotConsoleApp
                 }
                 rating = item.Value;
             }
-            Console.WriteLine(rating);
+            return rating;
 
         }
         public static string[] GetQuestions(int countQuestions)
@@ -118,13 +148,22 @@ namespace GeniyIdiotConsoleApp
                     }
                 }
                 Console.Write($"{userName}, Ваш диагноз: ");
-                GetDiagnosis(countRightAnswers, countQuestions);
+                Console.WriteLine(GetDiagnosis(countRightAnswers, countQuestions));
                 Console.WriteLine($"Количество правильных ответов: {countRightAnswers}");
-                Console.WriteLine("----------------------------------------");
+                Console.WriteLine("--------------------------------------------------------------");
+                string Diagnosis = GetDiagnosis(countRightAnswers, countQuestions);
+                SaveFileResult(userName, countRightAnswers, Diagnosis);
                 Console.WriteLine("Хотите ли пройти тест снова? Введите ДА или НЕТ");
                 string userAnswerRepeatTest = Console.ReadLine();
-                if (userAnswerRepeatTest == "нет".ToLower()) flagStartForTest = false;
-
+                if (userAnswerRepeatTest == "нет".ToLower())
+                {
+                    flagStartForTest = false;
+                    Console.WriteLine("Хотите ли посмотреть результаты тестирования? Введите ДА или НЕТ");
+                    string userAnswerForResultTest = Console.ReadLine();
+                    if (userAnswerForResultTest == "да".ToLower()) OpenFileResult();
+                }
+                
+                
             }
 
 
